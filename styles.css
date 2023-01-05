@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 100px 1fr;
+  grid-template-areas:
+    "header"
+    "mainContent";
+}
+
+.pageTitle {
+  margin: 1rem;
+}
+
+.addNewBook {
+  align-self: center;
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  color: black;
+  padding: 2rem;
+}
+
+.mainContent {
+  grid-area: mainContent;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
+  grid-auto-rows: 200px;
+  grid-gap: 3rem;
+  padding: 3rem;
+}
+
+.card {
+  background-color: aliceblue;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+}

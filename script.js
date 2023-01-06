@@ -1,14 +1,5 @@
 let myLibrary = [];
 
-//Add Event Listener on click Add New Book button
-const addNewBook = document.querySelector(".addNewBook");
-addNewBook.addEventListener("click", toggleForm);
-
-function toggleForm() {
-  const form = document.querySelector(".bookForm");
-  form.toggleAttribute("display", "hidden");
-}
-
 function Book(userInput) {
   this.author = author;
   this.title = title;
@@ -67,3 +58,31 @@ function displayBooks() {
 //Function that adds a new book
 //Each book has 4 parameters: author, title, number of pages, and if it's been read
 function addNewBook() {}
+
+//Add functionality to button
+const btnAddBook = document.querySelector(".addNewBook");
+btnAddBook.addEventListener("click", toggleForm);
+
+//Remove if clicking outside of the form
+const divForm = document.querySelector(".bookForm");
+console.log(divForm);
+divForm.addEventListener("click", removeForm);
+
+function removeForm() {
+  const bookForm = document.querySelector(".bookForm");
+  if (bookForm.style.display === "none") {
+    bookForm.style.display = "flex";
+  } else if (bookForm.style.display === "flex") {
+    bookForm.style.display = "none";
+  }
+}
+
+function toggleForm() {
+  const bookForm = document.querySelector(".bookForm");
+  bookForm.style.display = "none";
+  if (bookForm.style.display === "none") {
+    bookForm.style.display = "flex";
+  } else if (bookForm.style.display === "flex") {
+    bookForm.style.display = "none";
+  }
+}

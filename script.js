@@ -13,24 +13,31 @@ function Book(userInput) {
 
 //Function that takes the user input and adds to the library
 function addBookToLibrary(userInput) {
-  newBook = new Book(userInput);
-  myLibrary.append(newBook);
+  let newBook = new Book(userInput);
+  myLibrary.push(newBook);
 }
 
-function processUserInput() {
-  this.preventDefault();
-  const inputTitle = document.querySelector("input#title");
-  const inputAuthor = document.querySelector("input#author");
-  const inputNumPages = document.querySelector("input#numPages");
+const bookSubmit = document.getElementById("addBookForm");
+bookSubmit.addEventListener("submit", processUserInput);
 
-  let userInput = [inputTitle.value, inputAuthor.value, inputNumPages.value];
+function processUserInput(event) {
+  let userInput = [];
+  userInput[0] = document.getElementById("title").value;
+  userInput[1] = document.getElementById("author").value;
+  userInput[2] = document.getElementById("numPages").value;
+  const formData = new FormData(bookSubmit);
+  userInput[3] = formData.get("readStatus");
   addBookToLibrary(userInput);
+  bookSubmit.reset();
+  removeForm();
+  displayBooks();
+  event.preventDefault();
 }
 
 //Function that loops through myLibrary and displays each book as a card
 function displayBooks() {
   const mainContent = document.querySelector(".mainContent");
-
+  mainContent.innerHTML = "";
   let counter = 0;
   for (let book of myLibrary) {
     let bookDisp = document.createElement("div");
@@ -39,30 +46,39 @@ function displayBooks() {
 
     let bookTitle = document.createElement("h1");
     bookTitle.classList.add("bookTitle");
-    bookTitle.textContent = book[0];
+    bookTitle.textContent = book.title;
     bookDisp.appendChild(bookTitle);
 
     let author = document.createElement("h2");
     author.classList.add("author");
-    author.textContent = book[1];
+    author.textContent = book.author;
     bookDisp.appendChild(author);
 
     let numPages = document.createElement("p");
     numPages.classList.add("numPages");
-    numPages.textContent = book[2];
+    numPages.textContent = book.numPages;
     bookDisp.appendChild(numPages);
 
-    let btnReadStatus = document.createElement("btn");
+    let btnReadStatus = document.createElement("button");
     btnReadStatus.classList.add("readStatus");
-    btnReadStatus.textContent = book[3];
+    btnReadStatus.textContent = book.read;
     bookDisp.appendChild(btnReadStatus);
 
-    let btnRemove = document.createElement("btn");
+    let btnRemove = document.createElement("button");
     btnRemove.classList.add("remove");
-    bookDisp.appendChild(btnReadStatus);
-
+    btnRemove.textContent = "Remove";
+    bookDisp.appendChild(btnRemove);
     mainContent.appendChild(bookDisp);
   }
+
+  let removeBtns = document.querySelectorAll(".readStatus");
+  console.log(removeBtns);
+  removeBtns.forEach((button) =>
+    button.addEventListener("click", () => {
+      console.log("a");
+      button.textContent = button.textContent == "Read" ? "Not Read" : "Read";
+    })
+  );
 }
 
 //Function that adds a new book
@@ -82,7 +98,7 @@ function addForm() {
 //Prevent clicks on the form to propagate up to parent div
 divForm.addEventListener("click", (e) => e.stopPropagation(), true);
 
-//Remove if clicking outside of the form
+//Hide form if clicking outside of the form
 divForm.addEventListener("click", removeForm, false);
 
 function removeForm() {

@@ -5,12 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Library</title>
+    <link rel="icon" href="icons/book-open-blank-variant.svg" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="header">
       <h1 class="pageTitle">library</h1>
-      <button class="addNewBook">New Book</button>
+      <button class="addNewBook">+ Add to Library</button>
     </div>
     <div class="mainContent">
       <div class="card">
@@ -23,19 +24,19 @@
     </div>
 
     <div class="bookForm">
-      <form action="">
+      <form action="" id="addBookForm">
         <legend>Add a New Book</legend>
         <input type="text" id="title" placeholder="Title" />
         <input type="text" id="author" placeholder="Author" />
         <input type="number" id="numPages" placeholder="Number of Pages Read" />
         <fieldset>
           <legend>Have you read this book yet?</legend>
-          <input type="radio" name="readStatus" id="yes" value="yes" />
+          <input type="radio" name="readStatus" id="yes" value="Read" />
           <label for="yes">Yes</label>
-          <input type="radio" name="readStatus" id="no" value="no" />
+          <input type="radio" name="readStatus" id="no" value="Not Read" />
           <label for="no">No</label>
         </fieldset>
-        <input type="submit" value="Submit" onclick="processUserInput()" />
+        <input type="submit" value="submit" />
       </form>
     </div>
   </body>

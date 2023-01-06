@@ -26,17 +26,29 @@ body {
   flex-flow: column;
   align-items: flex-start;
   color: black;
-  padding: 2rem;
+  padding: 1rem;
   padding-bottom: 0.5rem;
 }
 
 .pageTitle {
   margin: 1rem;
+  margin-left: 3rem;
 }
 
 .addNewBook {
   align-self: center;
-  z-index: 1;
+  position: relative;
+  background-color: transparent;
+  border: none;
+  border-radius: 10px;
+  transition: background-color 0.1s;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+
+.addNewBook:hover {
+  background-color: lightgray;
+  border-radius: 10px;
 }
 
 /*Main Content*/
@@ -88,7 +100,6 @@ div.bookForm {
 
 .bookForm form input {
   margin: 0.5rem;
-  appearance: none;
   padding: 0.5rem;
   border-radius: 5px;
 }

@@ -28,6 +28,7 @@ body {
   color: black;
   padding: 1rem;
   padding-bottom: 0.5rem;
+  background-color: #f0f9ff;
 }
 
 .pageTitle {
@@ -47,7 +48,7 @@ body {
 }
 
 .addNewBook:hover {
-  background-color: lightgray;
+  background-color: #bae6fd;
   border-radius: 10px;
 }
 
@@ -59,16 +60,17 @@ body {
   grid-auto-rows: 200px;
   grid-gap: 3rem;
   padding: 3rem;
-  background-color: gray;
+  background-color: #0ea5e9;
 }
 
 /*Each book will displayed on a card*/
 .card {
-  background-color: aliceblue;
+  background-color: #fce7f3;
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-evenly;
   padding: 1rem;
+  border-radius: 5px;
 }
 
 /*Form*/
@@ -88,7 +90,7 @@ div.bookForm {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: flex-start;
-  background-color: lightgray;
+  background-color: #bae6fd;
   padding: 2rem;
   border-radius: 5px;
 }
@@ -100,6 +102,52 @@ div.bookForm {
 
 .bookForm form input {
   margin: 0.5rem;
+  margin-left: 1.4rem;
   padding: 0.5rem;
+  border: none;
   border-radius: 5px;
+}
+
+#addBookForm input[type="submit"] {
+  align-self: center;
+  appearance: none;
+  background-color: lightgreen;
+  border: none;
+  box-shadow: 1px 1px rgb(0, 0, 0, 0.5);
+}
+
+#addBookForm input[type="radio"] {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 0.1rem solid black;
+  border-radius: 50%;
+
+  transform: translateY(0.2rem);
+  display: grid;
+  place-content: center;
+}
+
+#addBookForm input[type="radio"]::before {
+  content: "";
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: black;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+}
+
+#addBookForm input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+.radio-yes-no {
+  display: flex;
+  justify-content: center;
+}
+
+.radio {
+  display: flex;
+  align-items: baseline;
 }

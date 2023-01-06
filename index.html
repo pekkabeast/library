@@ -13,30 +13,44 @@
       <h1 class="pageTitle">library</h1>
       <button class="addNewBook">+ Add to Library</button>
     </div>
-    <div class="mainContent">
-      <div class="card">
-        <h1 class="bookTitle">Title</h1>
-        <h2 class="author">author</h2>
-        <p class="numPages">32</p>
-        <button class="readStatus">Read</button>
-        <button class="remove">Remove</button>
-      </div>
-    </div>
+    <div class="mainContent"></div>
 
     <div class="bookForm">
       <form action="" id="addBookForm">
         <legend>Add a New Book</legend>
-        <input type="text" id="title" placeholder="Title" />
-        <input type="text" id="author" placeholder="Author" />
-        <input type="number" id="numPages" placeholder="Number of Pages Read" />
-        <fieldset>
+        <input type="text" id="title" placeholder="Title" required />
+        <input type="text" id="author" placeholder="Author" required />
+        <input
+          type="number"
+          id="numPages"
+          placeholder="Number of Pages Read"
+          min="0"
+          required
+        />
+        <fieldset class="radio-yes-no">
           <legend>Have you read this book yet?</legend>
-          <input type="radio" name="readStatus" id="yes" value="Read" />
-          <label for="yes">Yes</label>
-          <input type="radio" name="readStatus" id="no" value="Not Read" />
-          <label for="no">No</label>
+          <div class="radio">
+            <input
+              type="radio"
+              name="readStatus"
+              id="yes"
+              value="Read"
+              required
+            />
+            <label for="yes">Yes</label>
+          </div>
+          <div class="radio">
+            <input
+              type="radio"
+              name="readStatus"
+              id="no"
+              value="Not Read"
+              required
+            />
+            <label for="no">No</label>
+          </div>
         </fieldset>
-        <input type="submit" value="submit" />
+        <input type="submit" value="Submit" />
       </form>
     </div>
   </body>

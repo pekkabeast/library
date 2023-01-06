@@ -23,12 +23,19 @@
     </div>
 
     <div class="bookForm">
-      <form action="" onclick="event.stopPropagation()">
+      <form action="">
         <legend>Add a New Book</legend>
         <input type="text" id="title" placeholder="Title" />
         <input type="text" id="author" placeholder="Author" />
         <input type="number" id="numPages" placeholder="Number of Pages Read" />
-        <input type="radio" />
+        <fieldset>
+          <legend>Have you read this book yet?</legend>
+          <input type="radio" name="readStatus" id="yes" value="yes" />
+          <label for="yes">Yes</label>
+          <input type="radio" name="readStatus" id="no" value="no" />
+          <label for="no">No</label>
+        </fieldset>
+        <input type="submit" value="Submit" onclick="processUserInput()" />
       </form>
     </div>
   </body>

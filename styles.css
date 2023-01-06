@@ -8,6 +8,7 @@ body {
   height: 100%;
 }
 
+/*Structure for whole page*/
 body {
   display: grid;
   grid-template-columns: auto;
@@ -16,6 +17,17 @@ body {
     "header"
     "mainContent";
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*Header*/
+.header {
+  grid-area: header;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  color: black;
+  padding: 2rem;
+  padding-bottom: 0.5rem;
 }
 
 .pageTitle {
@@ -27,16 +39,7 @@ body {
   z-index: 1;
 }
 
-.header {
-  grid-area: header;
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  color: black;
-  padding: 2rem;
-  padding-bottom: 0.5rem;
-}
-
+/*Main Content*/
 .mainContent {
   grid-area: mainContent;
   display: grid;
@@ -47,6 +50,7 @@ body {
   background-color: gray;
 }
 
+/*Each book will displayed on a card*/
 .card {
   background-color: aliceblue;
   display: flex;
@@ -55,6 +59,7 @@ body {
   padding: 1rem;
 }
 
+/*Form*/
 div.bookForm {
   position: absolute;
   width: 100%;

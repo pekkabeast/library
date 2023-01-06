@@ -1,10 +1,11 @@
 let myLibrary = [];
 
+//Constructor function for a book
 function Book(userInput) {
-  this.author = author;
-  this.title = title;
-  this.numPages = numPages;
-  this.read = readStatus;
+  this.author = userInput[0];
+  this.title = userInput[1];
+  this.numPages = userInput[2];
+  this.read = userInput[3];
   readToggle = function () {
     this.read = this.read == "read" ? "unread" : "read";
   };
@@ -13,8 +14,17 @@ function Book(userInput) {
 //Function that takes the user input and adds to the library
 function addBookToLibrary(userInput) {
   newBook = new Book(userInput);
-
   myLibrary.append(newBook);
+}
+
+function processUserInput() {
+  this.preventDefault();
+  const inputTitle = document.querySelector("input#title");
+  const inputAuthor = document.querySelector("input#author");
+  const inputNumPages = document.querySelector("input#numPages");
+
+  let userInput = [inputTitle.value, inputAuthor.value, inputNumPages.value];
+  addBookToLibrary(userInput);
 }
 
 //Function that loops through myLibrary and displays each book as a card
@@ -61,28 +71,21 @@ function addNewBook() {}
 
 //Add functionality to button
 const btnAddBook = document.querySelector(".addNewBook");
-btnAddBook.addEventListener("click", toggleForm);
+btnAddBook.addEventListener("click", addForm);
+
+const divForm = document.querySelector(".bookForm");
+function addForm() {
+  const bookForm = document.querySelector(".bookForm");
+  bookForm.style.display = "flex";
+}
+
+//Prevent clicks on the form to propagate up to parent div
+divForm.addEventListener("click", (e) => e.stopPropagation(), true);
 
 //Remove if clicking outside of the form
-const divForm = document.querySelector(".bookForm");
-console.log(divForm);
-divForm.addEventListener("click", removeForm);
+divForm.addEventListener("click", removeForm, false);
 
 function removeForm() {
   const bookForm = document.querySelector(".bookForm");
-  if (bookForm.style.display === "none") {
-    bookForm.style.display = "flex";
-  } else if (bookForm.style.display === "flex") {
-    bookForm.style.display = "none";
-  }
-}
-
-function toggleForm() {
-  const bookForm = document.querySelector(".bookForm");
   bookForm.style.display = "none";
-  if (bookForm.style.display === "none") {
-    bookForm.style.display = "flex";
-  } else if (bookForm.style.display === "flex") {
-    bookForm.style.display = "none";
-  }
 }

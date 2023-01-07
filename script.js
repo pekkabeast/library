@@ -27,6 +27,7 @@ function processUserInput(event) {
   userInput[2] = document.getElementById("numPages").value;
   const formData = new FormData(bookSubmit);
   userInput[3] = formData.get("readStatus");
+
   addBookToLibrary(userInput);
   bookSubmit.reset();
   removeForm();
@@ -40,6 +41,7 @@ function displayBooks() {
   mainContent.innerHTML = "";
   let counter = 0;
   for (let book of myLibrary) {
+    book.index = counter;
     let bookDisp = document.createElement("div");
     bookDisp.setAttribute("data-index", counter);
     bookDisp.classList.add("card");
@@ -61,22 +63,44 @@ function displayBooks() {
 
     let btnReadStatus = document.createElement("button");
     btnReadStatus.classList.add("readStatus");
+    btnReadStatus.setAttribute("data-index", counter);
     btnReadStatus.textContent = book.read;
     bookDisp.appendChild(btnReadStatus);
 
     let btnRemove = document.createElement("button");
     btnRemove.classList.add("remove");
+    btnRemove.setAttribute("data-index", counter);
     btnRemove.textContent = "Remove";
     bookDisp.appendChild(btnRemove);
+
     mainContent.appendChild(bookDisp);
+    counter += 1;
   }
 
-  let removeBtns = document.querySelectorAll(".readStatus");
-  console.log(removeBtns);
+  //Function to change Read status on existing book and update book object in myLibrary array
+  let readBtns = document.querySelectorAll(".readStatus");
+
+  readBtns.forEach((button) =>
+    button.addEventListener("click", () => {
+      let updateBook = myLibrary.find(
+        (book) => book.index == button.getAttribute("data-index")
+      );
+      updateBook.read = button.textContent == "Read" ? "Not Read" : "Read";
+      button.textContent = button.textContent == "Read" ? "Not Read" : "Read";
+    })
+  );
+
+  //Function remove a book and update myLibrary object indices
+  let removeBtns = document.querySelectorAll(".remove");
+
   removeBtns.forEach((button) =>
     button.addEventListener("click", () => {
-      console.log("a");
-      button.textContent = button.textContent == "Read" ? "Not Read" : "Read";
+      let removeBook = myLibrary.find(
+        (book) => book.index == button.getAttribute("data-index")
+      );
+      let indexRemovedBook = myLibrary.indexOf(removeBook);
+      myLibrary.splice(indexRemovedBook, 1);
+      displayBooks();
     })
   );
 }

@@ -69,8 +69,39 @@ body {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-evenly;
+  align-items: center;
   padding: 1rem;
+  padding-bottom: 0.5rem;
   border-radius: 5px;
+}
+
+.readStatus {
+  margin-top: 1rem;
+}
+
+.readStatus,
+.remove {
+  width: 5rem;
+  appearance: none;
+  padding: 0.3rem;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 1px 1px gray;
+  background-color: #bef264;
+  transition: background-color 100ms;
+  font-size: 0.7rem;
+}
+
+.readStatus:hover {
+  background-color: #65a30d;
+}
+
+.remove {
+  background-color: #fca5a5;
+}
+
+.remove:hover {
+  background-color: #b91c1c;
 }
 
 /*Form*/

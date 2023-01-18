@@ -1,14 +1,26 @@
 let myLibrary = [];
 
 //Constructor function for a book
-function Book(userInput) {
-  this.author = userInput[0];
-  this.title = userInput[1];
-  this.numPages = userInput[2];
-  this.read = userInput[3];
-  readToggle = function () {
+// function Book(userInput) {
+//   this.author = userInput[0];
+//   this.title = userInput[1];
+//   this.numPages = userInput[2];
+//   this.read = userInput[3];
+//   readToggle = function () {
+//     this.read = this.read == "read" ? "unread" : "read";
+//   };
+// }
+
+class Book {
+  constructor(userInput) {
+    this.author = userInput[0];
+    this.title = userInput[1];
+    this.numPages = userInput[2];
+    this.read = userInput[3];
+  }
+  readToggle() {
     this.read = this.read == "read" ? "unread" : "read";
-  };
+  }
 }
 
 //Function that takes the user input and adds to the library

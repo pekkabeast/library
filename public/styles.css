@@ -52,6 +52,22 @@ body {
   border-radius: 10px;
 }
 
+.signin-bar {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+}
+
+.signin-bar button {
+  appearance: none;
+  background: none;
+  border: none;
+}
+
+.signin-bar button:hover {
+  border: 1px solid lightgray;
+}
+
 /*Main Content*/
 .mainContent {
   grid-area: mainContent;

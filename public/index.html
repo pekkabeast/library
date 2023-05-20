@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library</title>
+    <link rel="icon" href="icons/book-open-blank-variant.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1 class="pageTitle">library</h1>
+      <button class="addNewBook">+ Add to Library</button>
+      <div class="signin-bar">
+        <div hidden id="user-pic"></div>
+        <div hidden id="user-name"></div>
+        <button hidden id="sign-out">Sign-out</button>
+        <button id="sign-in">Sign-in with Google</button>
+      </div>
+    </div>
+    <div class="mainContent"></div>
+    <div class="bookForm">
+      <form action="" id="book-form">
+        <legend>Add a New Book</legend>
+        <input
+          type="text"
+          id="title"
+          placeholder="Title"
+          minlength="3"
+          maxlength="10"
+          name="bookTitle"
+        />
+        <input
+          type="text"
+          id="author"
+          placeholder="Author"
+          name="bookAuthor"
+          required
+        />
+        <input
+          type="number"
+          id="numPages"
+          placeholder="Number of Pages Read"
+          min="0"
+          name="pagesRead"
+          required
+        />
+        <fieldset class="radio-yes-no">
+          <legend>Have you read this book yet?</legend>
+          <div class="radio">
+            <input
+              type="radio"
+              name="readStatus"
+              id="yes"
+              value="Read"
+              required
+            />
+            <label for="yes">Yes</label>
+          </div>
+          <div class="radio">
+            <input
+              type="radio"
+              name="readStatus"
+              id="no"
+              value="Not Read"
+              required
+            />
+            <label for="no">No</label>
+          </div>
+        </fieldset>
+        <input id="submit" type="submit" value="Submit" />
+      </form>
+    </div>
+  </body>
+
+  <script src="main.js"></script>
+</html>

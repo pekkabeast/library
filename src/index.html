@@ -12,13 +12,23 @@
     <div class="header">
       <h1 class="pageTitle">library</h1>
       <button class="addNewBook">+ Add to Library</button>
+      <div hidden id="user-pic"></div>
+      <div hidden id="user-name"></div>
+      <button hidden id="sign-out">Sign-out</button>
+      <button id="sign-in">Sign-in with Google</button>
     </div>
     <div class="mainContent"></div>
 
     <div class="bookForm">
       <form action="" id="addBookForm">
         <legend>Add a New Book</legend>
-        <input type="text" id="title" placeholder="Title" required />
+        <input
+          type="text"
+          id="title"
+          placeholder="Title"
+          minlength="3"
+          maxlength="10"
+        />
         <input type="text" id="author" placeholder="Author" required />
         <input
           type="number"

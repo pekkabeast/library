@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "firebase": "^9.22.0"
+  },
+  "name": "library",
+  "description": "Site preview link: https://htmlpreview.github.io/?https://github.com/pekkabeast/library/blob/main/index.html",
+  "version": "1.0.0",
+  "private": true,
+  "main": "firebase-config.js",
+  "devDependencies": {
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

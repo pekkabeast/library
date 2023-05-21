@@ -13,7 +13,11 @@ import {
   query,
   onSnapshot,
   orderBy,
+  doc,
+  deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
+import "./styles.css";
 
 import { getFirebaseConfig } from "../firebase-config.js";
 
@@ -40,7 +44,6 @@ function authStateObserver(user) {
   if (user) {
     let profilePicUrl = getProfilePicUrl();
     let userName = getUserName();
-
     userPicElement.style.backgroundImage =
       "url(" + addSizeToGoogleProfilePic(profilePicUrl) + "?";
     userNameElement.textContent = userName;
@@ -50,11 +53,13 @@ function authStateObserver(user) {
     userPicElement.removeAttribute("hidden");
     signOutButtonElement.removeAttribute("hidden");
     signInButtonElement.setAttribute("hidden", true);
+    loadBooks();
   } else {
     userNameElement.setAttribute("hidden", "true");
     userPicElement.setAttribute("hidden", "true");
     signOutButtonElement.setAttribute("hidden", "true");
     signInButtonElement.removeAttribute("hidden");
+    clearLibrary();
   }
 }
 
@@ -84,8 +89,10 @@ let userPicElement = document.getElementById("user-pic");
 let userNameElement = document.getElementById("user-name");
 let signInButtonElement = document.getElementById("sign-in");
 let signOutButtonElement = document.getElementById("sign-out");
-let submitButtonElement = document.getElementById("submit");
 let bookFormElement = document.getElementById("book-form");
+let bookFormContainer = document.querySelector(".bookForm");
+let mainContentContainer = document.getElementById("library");
+let displayFormBtnElement = document.querySelector(".addNewBook");
 
 //Sign in and out button functionality
 signInButtonElement.addEventListener("click", signIn);
@@ -93,6 +100,36 @@ signOutButtonElement.addEventListener("click", signOutUser);
 
 //Form submit functionality
 bookFormElement.addEventListener("submit", onBookFormSubmit);
+displayFormBtnElement.addEventListener("click", displayForm);
+
+function displayForm() {
+  bookFormContainer.style.display = "flex";
+  if (!isUserSignedIn()) {
+    if (!bookFormElement.querySelector("#form-error")) {
+      let errorMessage = document.createElement("span");
+      errorMessage.textContent = "Sign in to add a book!";
+      errorMessage.style.color = "red";
+      errorMessage.id = "form-error";
+      bookFormElement.appendChild(errorMessage);
+    }
+  } else {
+    if (bookFormElement.querySelector("#form-error")) {
+      bookFormElement.removeChild(document.getElementById("form-error"));
+    }
+  }
+}
+
+//Prevent clicks on the form to propagate up to parent div
+bookFormContainer.addEventListener("click", (e) => e.stopPropagation(), true);
+
+//Hide form if clicking outside of the form
+bookFormContainer.addEventListener(
+  "click",
+  () => {
+    bookFormContainer.style.display = "none";
+  },
+  false
+);
 
 function onBookFormSubmit(e) {
   e.preventDefault();
@@ -139,7 +176,7 @@ async function saveBook(formValues) {
 }
 
 //Load books in library and listen for upcoming ones
-function loadBooks() {
+function loadBooks(user) {
   //create query to load all books
   const booksQuery = query(
     collection(getFirestore(), "books"),
@@ -147,187 +184,125 @@ function loadBooks() {
   );
 
   //Start listening to query
-  onSnapshot(booksQuery, (snapshot) => {
+  let endSnapshot = onSnapshot(booksQuery, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
         let book = change.doc.data();
-        console.log(book);
-        displayBook(change.doc.id);
+        displayBook(book, change.doc.id);
       } else if (change.type === "removed") {
-        deleteBook(change.doc.id);
+        deleteBookfromDB(change.doc.id);
       }
     });
   });
+
+  onAuthStateChanged(getAuth(), (user) => {
+    if (!user) {
+      endSnapshot();
+    }
+  });
 }
 
-function displayBook(id) {
-  console.log(id);
+function displayBook(book, bookId) {
+  let div = newBookTile(book, bookId);
+  mainContentContainer.appendChild(div);
+
+  let activeDiv = document.getElementById(div.id);
+  addRemoveBtnFunctionality(activeDiv);
+  addReadBtnFunctionality(activeDiv);
 }
 
-let myLibrary = [];
+function addRemoveBtnFunctionality(element) {
+  //Add remove button status
+  let removeBtn = element.querySelector(".remove");
+  removeBtn.addEventListener("click", deleteBook);
+}
 
-//Constructor function for a book
-// function Book(userInput) {
-//   this.author = userInput[0];
-//   this.title = userInput[1];
-//   this.numPages = userInput[2];
-//   this.read = userInput[3];
-//   readToggle = function () {
-//     this.read = this.read == "read" ? "unread" : "read";
-//   };
-// }
-/*
-const form = document.getElementById("book-form");
-const titleField = document.getElementById("title");
+function addReadBtnFunctionality(element) {
+  let readBtn = element.querySelector(".readStatus");
+  readBtn.setAttribute(
+    "data-readStatus",
+    readBtn.textContent === "Read" ? "true" : "false"
+  );
+  readBtn.addEventListener("click", setBookReadStatus);
+}
 
-titleField.addEventListener("input", (event) => {
-  if (titleField.validity.tooShort) {
-    titleField.setCustomValidity("Too short");
-  } else if (titleField.validity.tooLong) {
-    titleField.setCustomValidity("Too long");
+function setBookReadStatus(event) {
+  let bookReadBtn = event.target;
+
+  if (bookReadBtn.getAttribute("data-readStatus") === "true") {
+    bookReadBtn.setAttribute("data-readStatus", false);
   } else {
-    titleField.setCustomValidity("");
+    bookReadBtn.setAttribute("data-readStatus", true);
   }
-  titleField.reportValidity();
-});
-
-form.addEventListener("submit", (event) => {
-  if (!titleField.validity.valid) {
-    titleField.setCustomValidity("Wrong email");
-    event.preventDefault();
-  }
-});
-*/
-class Book {
-  constructor(userInput) {
-    this.author = userInput[0];
-    this.title = userInput[1];
-    this.numPages = userInput[2];
-    this.read = userInput[3];
-  }
-  readToggle() {
-    this.read = this.read == "read" ? "unread" : "read";
-  }
-}
-
-//Function that takes the user input and adds to the library
-function addBookToLibrary(userInput) {
-  let newBook = new Book(userInput);
-  myLibrary.push(newBook);
-}
-
-/*
-const bookSubmit = document.getElementById("book-form");
-bookSubmit.addEventListener("submit", processUserInput);
-
-
-function processUserInput(event) {
-  let userInput = [];
-  userInput[0] = document.getElementById("title").value;
-  userInput[1] = document.getElementById("author").value;
-  userInput[2] = document.getElementById("numPages").value;
-  const formData = new FormData(bookSubmit);
-  userInput[3] = formData.get("readStatus");
-
-  addBookToLibrary(userInput);
-  bookSubmit.reset();
-  removeForm();
-  displayBooks();
-  event.preventDefault();
-}
-*/
-
-//Function that loops through myLibrary and displays each book as a card
-function displayBooks() {
-  const mainContent = document.querySelector(".mainContent");
-  mainContent.innerHTML = "";
-  let counter = 0;
-  for (let book of myLibrary) {
-    book.index = counter;
-    let bookDisp = document.createElement("div");
-    bookDisp.setAttribute("data-index", counter);
-    bookDisp.classList.add("card");
-
-    let bookTitle = document.createElement("h1");
-    bookTitle.classList.add("bookTitle");
-    bookTitle.textContent = book.title;
-    bookDisp.appendChild(bookTitle);
-
-    let author = document.createElement("h2");
-    author.classList.add("author");
-    author.textContent = book.author;
-    bookDisp.appendChild(author);
-
-    let numPages = document.createElement("p");
-    numPages.classList.add("numPages");
-    numPages.textContent = book.numPages;
-    bookDisp.appendChild(numPages);
-
-    let btnReadStatus = document.createElement("button");
-    btnReadStatus.classList.add("readStatus");
-    btnReadStatus.setAttribute("data-index", counter);
-    btnReadStatus.textContent = book.read;
-    bookDisp.appendChild(btnReadStatus);
-
-    let btnRemove = document.createElement("button");
-    btnRemove.classList.add("remove");
-    btnRemove.setAttribute("data-index", counter);
-    btnRemove.textContent = "Remove";
-    bookDisp.appendChild(btnRemove);
-
-    mainContent.appendChild(bookDisp);
-    counter += 1;
-  }
-
-  //Function to change Read status on existing book and update book object in myLibrary array
-  let readBtns = document.querySelectorAll(".readStatus");
-
-  readBtns.forEach((button) =>
-    button.addEventListener("click", () => {
-      let updateBook = myLibrary.find(
-        (book) => book.index == button.getAttribute("data-index")
-      );
-      updateBook.read = button.textContent == "Read" ? "Not Read" : "Read";
-      button.textContent = button.textContent == "Read" ? "Not Read" : "Read";
-    })
-  );
-
-  //Function remove a book and update myLibrary object indices
-  let removeBtns = document.querySelectorAll(".remove");
-
-  removeBtns.forEach((button) =>
-    button.addEventListener("click", () => {
-      let removeBook = myLibrary.find(
-        (book) => book.index == button.getAttribute("data-index")
-      );
-      let indexRemovedBook = myLibrary.indexOf(removeBook);
-      myLibrary.splice(indexRemovedBook, 1);
-      displayBooks();
-    })
+  bookReadBtn.textContent =
+    bookReadBtn.getAttribute("data-readStatus") === "true"
+      ? "Read"
+      : "Not Read";
+  bookReadBtn.className =
+    bookReadBtn.getAttribute("data-readStatus") === "true"
+      ? "readStatus read"
+      : "readStatus unread";
+  let bookId = bookReadBtn.parentNode.id;
+  updateDoc(
+    doc(getFirestore(), "books", bookId),
+    "readStatus",
+    bookReadBtn.getAttribute("data-readStatus") === "true" ? "Read" : "Not Read"
   );
 }
 
-//Add functionality to button
-const btnAddBook = document.querySelector(".addNewBook");
-btnAddBook.addEventListener("click", addForm);
+function newBookTile(book, bookId) {
+  let bookContainer = document.createElement("div");
+  bookContainer.className = "card";
+  bookContainer.id = bookId;
 
-const divForm = document.querySelector(".bookForm");
-function addForm() {
-  const bookForm = document.querySelector(".bookForm");
-  bookForm.style.display = "flex";
+  let bookTitle = document.createElement("h1");
+  bookTitle.classList.add("bookTitle");
+  bookTitle.textContent = book.title;
+
+  let author = document.createElement("h2");
+  author.classList.add("author");
+  author.textContent = book.author;
+
+  let numPages = document.createElement("p");
+  numPages.classList.add("numPages");
+  numPages.textContent = book.pagesRead;
+
+  let btnReadStatus = document.createElement("button");
+  btnReadStatus.classList.add("readStatus");
+  btnReadStatus.textContent = book.readStatus;
+
+  let btnRemove = document.createElement("button");
+  btnRemove.classList.add("remove");
+  btnRemove.textContent = "Remove";
+
+  bookContainer.append(bookTitle, author, numPages, btnReadStatus, btnRemove);
+
+  return bookContainer;
 }
 
-//Prevent clicks on the form to propagate up to parent div
-divForm.addEventListener("click", (e) => e.stopPropagation(), true);
+function deleteBook(event) {
+  let bookId = event.target.parentNode.id;
+  let book = document.getElementById(bookId);
+  if (book) {
+    deleteBookfromDB(bookId);
+    book.parentNode.removeChild(book);
+  }
+}
 
-//Hide form if clicking outside of the form
-divForm.addEventListener(
-  "click",
-  () => {
-    document.querySelector(".bookForm").style.display = "none";
-  },
-  false
-);
+async function deleteBookfromDB(bookId) {
+  await deleteDoc(doc(getFirestore(), "books", bookId))
+    .then(() => {
+      console.log("Document deleted");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function clearLibrary() {
+  while (mainContentContainer.firstChild) {
+    mainContentContainer.removeChild(mainContentContainer.firstChild);
+  }
+}
 
 initFirebaseAuth();
-loadBooks();

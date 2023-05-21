@@ -54,18 +54,21 @@ body {
 
 .signin-bar {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   justify-content: flex-start;
 }
 
 .signin-bar button {
   appearance: none;
   background: none;
-  border: none;
+
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid lightgray;
 }
 
 .signin-bar button:hover {
-  border: 1px solid lightgray;
+  border: 1px solid gray;
 }
 
 /*Main Content*/
@@ -103,9 +106,16 @@ body {
   border: none;
   border-radius: 10px;
   box-shadow: 1px 1px gray;
-  background-color: #bef264;
   transition: background-color 100ms;
   font-size: 0.7rem;
+}
+
+.read {
+  background-color: #bef264;
+}
+
+.unread {
+  background-color: #fca5a5;
 }
 
 .readStatus:hover {

@@ -8,6 +8,8 @@
   "private": true,
   "main": "firebase-config.js",
   "devDependencies": {
+    "css-loader": "^6.7.4",
+    "style-loader": "^3.3.3",
     "webpack": "^5.83.1",
     "webpack-cli": "^5.1.1"
   },
